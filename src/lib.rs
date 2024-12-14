@@ -146,3 +146,7 @@ pub fn usize_plus_i32(u: usize, i: i32) -> usize {
 pub fn u8_to_string(c: u8) -> String {
     String::from_utf8(vec![c]).unwrap()
 }
+
+pub fn split_by_char(s: &str) -> Vec<&str> {
+    s.split("").filter(|c| !c.is_empty()).collect()
+}
