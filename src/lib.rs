@@ -44,6 +44,11 @@ impl Direction {
             Direction::Right => Direction::Left,
         }
     }
+
+    pub fn apply_delta_to_usizes(self, usizes: (usize, usize)) -> (usize, usize) {
+        let (d_x, d_y) = self.delta();
+        (usize_plus_i32(usizes.0, d_x), usize_plus_i32(usizes.1, d_y))
+    }
 }
 
 #[macro_export]
