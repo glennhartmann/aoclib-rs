@@ -5,7 +5,7 @@ use std::{
     str::FromStr,
 };
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Direction {
     Up,
     Down,
