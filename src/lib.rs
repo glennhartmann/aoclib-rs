@@ -1,4 +1,5 @@
 pub mod dir;
+pub mod trie;
 
 use std::{
     fs::{read_to_string, File},
