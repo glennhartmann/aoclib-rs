@@ -1,3 +1,4 @@
+pub mod dijkstra;
 pub mod dir;
 pub mod trie;
 
