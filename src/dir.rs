@@ -2,7 +2,7 @@ use std::iter;
 
 use crate::usize_plus_i;
 
-pub trait Direction: Sized {
+pub trait Direction: Sized + PartialEq + Copy {
     fn delta(self) -> (i8, i8);
     fn rotate_right(self) -> Self;
     fn rotate_left(self) -> Self;
@@ -17,6 +17,22 @@ pub trait Direction: Sized {
             usize_plus_i(usizes.0, i64::from(d_x)),
             usize_plus_i(usizes.1, i64::from(d_y)),
         )
+    }
+
+    fn iter_internal(initial_dir: Self) -> impl Iterator<Item = Self> {
+        let mut d = initial_dir;
+        let mut first = true;
+        iter::from_fn(move || {
+            if d == initial_dir && !first {
+                return None;
+            }
+            first = false;
+
+            let r = d;
+            d = d.rotate_right();
+
+            Some(r)
+        })
     }
 
     fn iter_valid_usizes_deltas(
@@ -98,19 +114,7 @@ impl Direction for Dir4 {
     }
 
     fn iter() -> impl Iterator<Item = Dir4> {
-        let mut d = Dir4::Up;
-        let mut first = true;
-        iter::from_fn(move || {
-            if d == Dir4::Up && !first {
-                return None;
-            }
-            first = false;
-
-            let r = d;
-            d = d.rotate_right();
-
-            Some(r)
-        })
+        Self::iter_internal(Dir4::Up)
     }
 }
 
@@ -191,18 +195,6 @@ impl Direction for Dir8 {
     }
 
     fn iter() -> impl Iterator<Item = Dir8> {
-        let mut d = Dir8::Dir4(Dir4::Up);
-        let mut first = true;
-        iter::from_fn(move || {
-            if d == Dir8::Dir4(Dir4::Up) && !first {
-                return None;
-            }
-            first = false;
-
-            let r = d;
-            d = d.rotate_right();
-
-            Some(r)
-        })
+        Self::iter_internal(Dir8::Dir4(Dir4::Up))
     }
 }
