@@ -113,14 +113,29 @@
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
 <a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>dijkstra;
 <span class="kw">pub mod </span>dir;
 <span class="kw">pub mod </span>trie;
 
 <span class="kw">use </span>std::{
+    fmt,
     fs::{read_to_string, File},
     io::BufWriter,
-    iter,
+    iter, ops,
     str::FromStr,
 };
 
@@ -153,15 +168,11 @@
     r.append(<span class="kw-2">&amp;mut </span>prefix);
 
     <span class="kw">for </span>line <span class="kw">in </span>contents {
-        <span class="kw">let </span><span class="kw-2">mut </span>v = Vec::with_capacity(line.len() + padding * <span class="number">2</span>);
-        <span class="kw">let </span><span class="kw-2">mut </span>prefix = <span class="macro">vec!</span>[default; padding];
-        <span class="kw">let </span><span class="kw-2">mut </span>middle = line.to_vec();
-        <span class="kw">let </span><span class="kw-2">mut </span>suffix = <span class="macro">vec!</span>[default; padding];
-        v.append(<span class="kw-2">&amp;mut </span>prefix);
-        v.append(<span class="kw-2">&amp;mut </span>middle);
-        v.append(<span class="kw-2">&amp;mut </span>suffix);
+        <span class="kw">let </span>prefix = <span class="macro">vec!</span>[default; padding];
+        <span class="kw">let </span>middle = line.to_vec();
+        <span class="kw">let </span>suffix = <span class="macro">vec!</span>[default; padding];
 
-        r.push(v);
+        r.push(<span class="macro">vec!</span>[prefix, middle, suffix].into_iter().flatten().collect());
     }
 
     <span class="kw">let </span><span class="kw-2">mut </span>suffix = <span class="macro">vec!</span>[<span class="macro">vec!</span>[default; contents[<span class="number">0</span>].len() + padding * <span class="number">2</span>]; padding];
@@ -217,8 +228,12 @@
     })
 }
 
-<span class="kw">pub fn </span>usize_plus_i32(u: usize, i: i32) -&gt; usize {
-    (u <span class="kw">as </span>i32 + i) <span class="kw">as </span>usize
+<span class="kw">pub fn </span>usize_plus_i&lt;T&gt;(u: usize, i: T) -&gt; usize
+<span class="kw">where
+    </span>T: TryFrom&lt;usize, Error: fmt::Debug&gt; + ops::Add&lt;Output = T&gt;,
+    usize: TryFrom&lt;T, Error: fmt::Debug&gt;,
+{
+    usize::try_from(T::try_from(u).unwrap() + i).unwrap()
 }
 
 <span class="kw">pub fn </span>u8_to_string(c: u8) -&gt; String {
@@ -228,4 +243,17 @@
 <span class="kw">pub fn </span>split_by_char(s: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;<span class="kw-2">&amp;</span>str&gt; {
     s.split(<span class="string">""</span>).filter(|c| !c.is_empty()).collect()
 }
+
+<span class="kw">pub fn </span>position_2d&lt;T, P&gt;(v: <span class="kw-2">&amp;</span>[Vec&lt;T&gt;], <span class="kw-2">mut </span>predicate: P) -&gt; <span class="prelude-ty">Option</span>&lt;(usize, usize)&gt;
+<span class="kw">where
+    </span>P: FnMut(<span class="kw-2">&amp;</span>T) -&gt; bool,
+{
+    <span class="kw">for </span>(y, row) <span class="kw">in </span>v.iter().enumerate() {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = row.iter().position(<span class="kw-2">&amp;mut </span>predicate) {
+            <span class="kw">return </span><span class="prelude-val">Some</span>((x, y));
+        }
+    }
+
+    <span class="prelude-val">None
+</span>}
 </code></pre></div></section></main></body></html>
