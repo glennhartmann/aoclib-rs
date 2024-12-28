@@ -1,9 +1,9 @@
 use std::iter;
 
-use crate::usize_plus_i32;
+use crate::usize_plus_i;
 
 pub trait Direction: Sized {
-    fn delta(self) -> (i32, i32);
+    fn delta(self) -> (i8, i8);
     fn rotate_right(self) -> Self;
     fn rotate_left(self) -> Self;
     fn rotate_right_90(self) -> Self;
@@ -13,7 +13,10 @@ pub trait Direction: Sized {
 
     fn apply_delta_to_usizes(self, usizes: (usize, usize)) -> (usize, usize) {
         let (d_x, d_y) = self.delta();
-        (usize_plus_i32(usizes.0, d_x), usize_plus_i32(usizes.1, d_y))
+        (
+            usize_plus_i(usizes.0, i64::from(d_x)),
+            usize_plus_i(usizes.1, i64::from(d_y)),
+        )
     }
 
     fn iter_valid_usizes_deltas(
@@ -26,13 +29,19 @@ pub trait Direction: Sized {
                 None => return None,
                 Some(d) => {
                     let (dx, dy) = d.delta();
-                    let next = (curr.0 as i32 + dx, curr.1 as i32 + dy);
+                    let next = (
+                        i64::try_from(curr.0).unwrap() + i64::from(dx),
+                        i64::try_from(curr.1).unwrap() + i64::from(dy),
+                    );
                     if next.0 >= 0
-                        && next.0 < size.0 as i32
+                        && next.0 < i64::try_from(size.0).unwrap()
                         && next.1 >= 0
-                        && next.1 < size.1 as i32
+                        && next.1 < i64::try_from(size.1).unwrap()
                     {
-                        return Some((next.0 as usize, next.1 as usize));
+                        return Some((
+                            usize::try_from(next.0).unwrap(),
+                            usize::try_from(next.1).unwrap(),
+                        ));
                     }
                 }
             }
@@ -49,7 +58,7 @@ pub enum Dir4 {
 }
 
 impl Direction for Dir4 {
-    fn delta(self) -> (i32, i32) {
+    fn delta(self) -> (i8, i8) {
         match self {
             Dir4::Up => (0, -1),
             Dir4::Down => (0, 1),
@@ -115,7 +124,7 @@ pub enum Dir8 {
 }
 
 impl Direction for Dir8 {
-    fn delta(self) -> (i32, i32) {
+    fn delta(self) -> (i8, i8) {
         match self {
             Dir8::Dir4(d4) => d4.delta(),
             Dir8::UpRight => (1, -1),

@@ -3,9 +3,10 @@ pub mod dir;
 pub mod trie;
 
 use std::{
+    fmt,
     fs::{read_to_string, File},
     io::BufWriter,
-    iter,
+    iter, ops,
     str::FromStr,
 };
 
@@ -38,15 +39,11 @@ pub fn pad<T: Clone + Copy>(contents: &Vec<&[T]>, padding: usize, default: T) ->
     r.append(&mut prefix);
 
     for line in contents {
-        let mut v = Vec::with_capacity(line.len() + padding * 2);
-        let mut prefix = vec![default; padding];
-        let mut middle = line.to_vec();
-        let mut suffix = vec![default; padding];
-        v.append(&mut prefix);
-        v.append(&mut middle);
-        v.append(&mut suffix);
+        let prefix = vec![default; padding];
+        let middle = line.to_vec();
+        let suffix = vec![default; padding];
 
-        r.push(v);
+        r.push(vec![prefix, middle, suffix].into_iter().flatten().collect());
     }
 
     let mut suffix = vec![vec![default; contents[0].len() + padding * 2]; padding];
@@ -102,8 +99,12 @@ pub fn pairwise_iter<T: Copy>(v: &[T]) -> impl Iterator<Item = (T, T)> + use<'_,
     })
 }
 
-pub fn usize_plus_i32(u: usize, i: i32) -> usize {
-    (u as i32 + i) as usize
+pub fn usize_plus_i<T>(u: usize, i: T) -> usize
+where
+    T: TryFrom<usize, Error: fmt::Debug> + ops::Add<Output = T>,
+    usize: TryFrom<T, Error: fmt::Debug>,
+{
+    usize::try_from(T::try_from(u).unwrap() + i).unwrap()
 }
 
 pub fn u8_to_string(c: u8) -> String {
@@ -112,4 +113,17 @@ pub fn u8_to_string(c: u8) -> String {
 
 pub fn split_by_char(s: &str) -> Vec<&str> {
     s.split("").filter(|c| !c.is_empty()).collect()
+}
+
+pub fn position_2d<T, P>(v: &[Vec<T>], mut predicate: P) -> Option<(usize, usize)>
+where
+    P: FnMut(&T) -> bool,
+{
+    for (y, row) in v.iter().enumerate() {
+        if let Some(x) = row.iter().position(&mut predicate) {
+            return Some((x, y));
+        }
+    }
+
+    None
 }
