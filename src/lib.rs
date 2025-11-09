@@ -1,10 +1,11 @@
 pub mod dijkstra;
 pub mod dir;
+pub mod option_min_max;
 pub mod trie;
 
 use std::{
     fmt,
-    fs::{read_to_string, File},
+    fs::{File, read_to_string},
     io::BufWriter,
     iter, ops,
     str::FromStr,

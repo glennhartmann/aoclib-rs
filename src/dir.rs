@@ -40,24 +40,26 @@ pub trait Direction: Sized + PartialEq + Copy {
         size: (usize, usize),
     ) -> impl Iterator<Item = (usize, usize)> {
         let mut dir_iter = Self::iter();
-        iter::from_fn(move || loop {
-            match dir_iter.next() {
-                None => return None,
-                Some(d) => {
-                    let (dx, dy) = d.delta();
-                    let next = (
-                        i64::try_from(curr.0).unwrap() + i64::from(dx),
-                        i64::try_from(curr.1).unwrap() + i64::from(dy),
-                    );
-                    if next.0 >= 0
-                        && next.0 < i64::try_from(size.0).unwrap()
-                        && next.1 >= 0
-                        && next.1 < i64::try_from(size.1).unwrap()
-                    {
-                        return Some((
-                            usize::try_from(next.0).unwrap(),
-                            usize::try_from(next.1).unwrap(),
-                        ));
+        iter::from_fn(move || {
+            loop {
+                match dir_iter.next() {
+                    None => return None,
+                    Some(d) => {
+                        let (dx, dy) = d.delta();
+                        let next = (
+                            i64::try_from(curr.0).unwrap() + i64::from(dx),
+                            i64::try_from(curr.1).unwrap() + i64::from(dy),
+                        );
+                        if next.0 >= 0
+                            && next.0 < i64::try_from(size.0).unwrap()
+                            && next.1 >= 0
+                            && next.1 < i64::try_from(size.1).unwrap()
+                        {
+                            return Some((
+                                usize::try_from(next.0).unwrap(),
+                                usize::try_from(next.1).unwrap(),
+                            ));
+                        }
                     }
                 }
             }

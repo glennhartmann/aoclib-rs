@@ -32,11 +32,11 @@ pub trait Dijkstrable {
                 } else {
                     Some(curr.0.dist() + n.1)
                 };
-                if let Some(dval) = d {
-                    if self.dist(n.0).is_none() {
-                        self.set_dist(n.0, d);
-                        q.push(Reverse(Self::PQE::init(n.0, dval)));
-                    }
+                if let Some(dval) = d
+                    && self.dist(n.0).is_none()
+                {
+                    self.set_dist(n.0, d);
+                    q.push(Reverse(Self::PQE::init(n.0, dval)));
                 }
             }
         }
