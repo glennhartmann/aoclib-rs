@@ -14,6 +14,7 @@ version = "0.0.15"
 dependencies = [
  "anyhow",
  "num-rational",
+ "num-traits",
 ]
 
 [[package]]

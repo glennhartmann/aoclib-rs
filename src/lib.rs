@@ -4,6 +4,7 @@ pub mod dir;
 pub mod iter;
 pub mod matrix;
 pub mod option_min_max;
+pub mod point;
 pub mod trie;
 
 use std::{
