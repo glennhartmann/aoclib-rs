@@ -1,6 +1,7 @@
 pub mod binary_search;
 pub mod dijkstra;
 pub mod dir;
+pub mod iter;
 pub mod option_min_max;
 pub mod trie;
 
@@ -8,7 +9,7 @@ use std::{
     fmt,
     fs::{File, read_to_string},
     io::BufWriter,
-    iter, ops,
+    ops,
     str::FromStr,
 };
 
@@ -26,13 +27,6 @@ macro_rules! printwriteln {
             writeln!($writer, $fmt, $($args),+)
         }
     };
-}
-
-pub fn fwd_rev_incl_range(start: usize, end: usize) -> impl Iterator<Item = usize> {
-    let mut fwd = start..=end;
-    let mut rev = (end..=start).rev();
-
-    iter::from_fn(move || if start > end { rev.next() } else { fwd.next() })
 }
 
 pub fn pad<T: Clone + Copy>(contents: &Vec<&[T]>, padding: usize, default: T) -> Vec<Vec<T>> {
@@ -94,28 +88,6 @@ where
     }
 
     Ok(v)
-}
-
-pub fn pairwise_iter<T: Copy>(v: &[T]) -> impl Iterator<Item = (T, T)> + use<'_, T> {
-    let mut i = 0;
-    let mut j = 0;
-    iter::from_fn(move || {
-        if v.len() < 2 {
-            return None;
-        }
-
-        j += 1;
-        if j >= v.len() {
-            i += 1;
-            j = i + 1;
-        }
-
-        if j >= v.len() {
-            return None;
-        }
-
-        Some((v[i], v[j]))
-    })
 }
 
 /// Adds generic type to usize. Can panic if the values are outside the range of the given types.
