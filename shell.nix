@@ -7,6 +7,6 @@
     }
   )
   {
-    src = builtins.path { path = ./.; name = "aoc24"; };
+    src = builtins.path { path = ./.; name = "aoclib-rs"; };
   }
 ).shellNix
