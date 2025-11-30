@@ -1,3 +1,4 @@
+pub mod binary_search;
 pub mod dijkstra;
 pub mod dir;
 pub mod option_min_max;
