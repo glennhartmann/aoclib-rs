@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["fwd_rev_incl_range","pad","pairwise_iter","position_2d","prep_io","split_and_parse","split_by_char","u8_to_string","usize_plus_i"],"macro":["printwriteln"],"mod":["dijkstra","dir","trie"]};

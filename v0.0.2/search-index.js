@@ -1,0 +1,4 @@
+var searchIndex = new Map(JSON.parse('[["aoclib_rs",{"t":"HHQ","n":["fwd_rev_incl_range","pad","printwriteln"],"q":[[0,"aoclib_rs"],[3,"core::iter::traits::iterator"],[4,"alloc::vec"],[5,"core::clone"],[6,"core::marker"]],"i":"```","f":"{{bb}{{`{{f{}{{d{b}}}}}}}}{{{j{{l{{j{{h{c}}}}}}}}bc}{{l{{l{c}}}}}{nA`}}`","D":"`","p":[[1,"usize"],[17,"Item"],[10,"Iterator",3],[1,"slice"],[1,"reference",null,null,1],[5,"Vec",4],[10,"Clone",5],[10,"Copy",6]],"r":[],"b":[],"c":"OjAAAAAAAAA=","e":"OjAAAAEAAAAAAAMAEAAAAAAAAQACAAMA","P":[[1,"T"]]}]]'));
+if (typeof exports !== 'undefined') exports.searchIndex = searchIndex;
+else if (window.initSearch) window.initSearch(searchIndex);
+//{"start":39,"fragment_lengths":[496]}
