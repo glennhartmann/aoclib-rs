@@ -15,6 +15,8 @@ use std::{
     str::FromStr,
 };
 
+use num_traits::Zero;
+
 #[macro_export]
 macro_rules! printwriteln {
     ($writer:expr, $fmt:literal) => {
@@ -170,9 +172,9 @@ where
 /// ```
 pub fn gcd<T>(a: T, b: T) -> T
 where
-    T: Copy + ops::Rem<Output = T> + PartialEq<i64>,
+    T: Copy + ops::Rem<Output = T> + PartialEq + Zero,
 {
-    if b == 0 {
+    if b == T::zero() {
         return a;
     }
 
@@ -246,4 +248,22 @@ where
         }
     }
     b
+}
+
+/// Get the absolute value for generic types.
+///
+/// ```
+/// use aoclib_rs::abs;
+/// assert_eq!(abs(3), 3);
+/// assert_eq!(abs(0), 0);
+/// assert_eq!(abs(-5), 5);
+/// assert_eq!(abs(3.0), 3.0);
+/// assert_eq!(abs(0.0), 0.0);
+/// assert_eq!(abs(-5.0), 5.0);
+/// ```
+pub fn abs<T>(i: T) -> T
+where
+    T: PartialOrd + ops::Sub<Output = T> + Zero,
+{
+    if i < T::zero() { T::zero() - i } else { i }
 }
