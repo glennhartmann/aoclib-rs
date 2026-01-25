@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_angle"],"struct":["Point2d","Point3d","PointNd","Slope"],"trait":["PointDist","PointFromArray","PointManhattan"]};
