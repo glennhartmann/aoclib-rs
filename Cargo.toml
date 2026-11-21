@@ -1,9 +1,9 @@
 [package]
 name = "aoclib-rs"
-version = "0.0.16"
+version = "0.0.17"
 edition = "2024"
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.104"
 num-rational = "0.4.2"
 num-traits = "0.2.19"

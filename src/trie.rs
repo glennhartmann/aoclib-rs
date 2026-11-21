@@ -52,10 +52,8 @@ impl Trie {
     pub fn find(&self, word: &str) -> Option<&Self> {
         let mut curr = self;
         for c in word.chars() {
-            match curr.children.get(&c) {
-                None => return None,
-                Some(t) => curr = t,
-            };
+            let t = curr.children.get(&c)?;
+            curr = t;
         }
 
         Some(curr)
